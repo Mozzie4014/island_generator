@@ -99,8 +99,10 @@ function saveMcfunction(island) {
 
   let ID = "island_" + year() + month() + day() + hour() + minute() + second();
 
-  save(pack, ID + ".mcfunction");
+  // FIX: join the array yourself
+  save(pack.join("\n"), ID + ".mcfunction");
 }
+
 
 function renderIsland(blocks) {
   let list = [];
