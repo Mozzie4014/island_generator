@@ -5,8 +5,9 @@ let maxHeight = 200;
 
 const ui_scale = 2;
 
+
 function setup() {
-  createCanvas(600, 600, WEBGL);
+  createCanvas(windowWidth,windowHeight, WEBGL);
   noiseDetail(4, 1);
   lookup = {};
   lookup.stone = color(120, 120, 120);
@@ -18,12 +19,13 @@ function setup() {
   ui_save.position(0, 0);
   ui_save.mousePressed(saveMcfunction);
   ui_save.size(120 * ui_scale, 40 * ui_scale);
-
+  ui_save.style("font-size", (ui_scale*15)+"px")
+  
   island = genIsland(gridSize, maxHeight);
 
   //aveMcfunction(island)
   // console. log(island)
-  console.log(noiseSeed());
+ // console.log(noiseSeed());
 }
 
 function draw() {
