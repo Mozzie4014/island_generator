@@ -1,7 +1,7 @@
 let island = [];
 let gridSize = 20;
 let blockSize = 8;
-let maxHeight = 500;
+let maxHeight = 200;
 
 const ui_scale = 2;
 
@@ -21,6 +21,25 @@ function setup() {
   ui_save.size(120 * ui_scale, 40 * ui_scale);
   ui_save.style("font-size", ui_scale * 15 + "px");
 
+  ui_generate = createButton("generate");
+  ui_generate.position(0, 65*ui_scale);
+  ui_generate.mousePressed(ui_pressed_generate);
+  ui_generate.size(80 * ui_scale, 20 * ui_scale);
+  ui_generate.style("font-size", ui_scale * 15 + "px");
+  
+
+  
+  ui_maxHeight = createInput(200);
+  ui_maxHeight.position(0, 40*ui_scale);
+  ui_maxHeight.size(30 * ui_scale, 10 * ui_scale);
+  ui_maxHeight.style("font-size", ui_scale * 10 + "px");
+  
+  ui_gridSize = createInput(20);
+  ui_gridSize.position(0, 53*ui_scale);
+  ui_gridSize.size(30 * ui_scale, 10 * ui_scale);
+  ui_gridSize.style("font-size", ui_scale * 10 + "px");
+  
+
   island = genIsland(gridSize, maxHeight);
 
   //aveMcfunction(island)
@@ -34,8 +53,13 @@ function draw() {
   renderIsland(island);
 }
 
+function ui_pressed_generate() {
+  island = [];
+  island = genIsland(float(ui_gridSize.value()),float(ui_maxHeight.value()))
+}
+
 function getTexture(x, y, z) {
-  let s = 0.05;
+  let s = 0.02;
   let off = 200;
   if (y > -blockSize * 1) {
     return "grass_block";
@@ -50,6 +74,7 @@ function getTexture(x, y, z) {
 }
 
 function genIsland(size, maxHeight) {
+  noiseSeed(random(0,1000000))
   console.time("time");
   // let c = 0
   let blocks = [];
