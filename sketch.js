@@ -1,7 +1,7 @@
 let island = [];
 let gridSize = 20;
 let blockSize = 8;
-let maxHeight = 200;
+let maxHeight = 500;
 
 const ui_scale = 2;
 
@@ -10,7 +10,7 @@ function setup() {
   noiseDetail(4, 1);
   lookup = {};
   lookup.stone = color(120, 120, 120);
-  lookup.grass = color(0, 170, 0);
+  lookup.grass_block = color(0, 170, 0);
   lookup.andesite = color(70, 70, 70);
   lookup.dirt = color(120, 70, 0);
   // lookup = color()
@@ -38,7 +38,7 @@ function getTexture(x, y, z) {
   let s = 0.05;
   let off = 200;
   if (y > -blockSize * 1) {
-    return "grass";
+    return "grass_block";
   }
   if (y > -blockSize * random(2, 5)) {
     return "dirt";
@@ -101,7 +101,7 @@ function saveMcfunction() {
 
   for (let i = 0; i < island.length; i++) {
     let is = island[i];
-    pack.push(`setblock ~${is.x} ~${is.y} ~${is.z} ${is.type}`);
+    pack.push(`setblock ~${is.x/blockSize} ~${is.y/blockSize} ~${is.z/blockSize} ${is.type}`);
   }
 
   let ID =
