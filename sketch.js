@@ -35,7 +35,7 @@ function draw() {
 }
 
 function getTexture(x, y, z) {
-  let s = 0.005;
+  let s = 0.05;
   let off = 200;
   if (y > -blockSize * 1) {
     return "grass";
@@ -54,6 +54,7 @@ function genIsland(size, maxHeight) {
   // let c = 0
   let blocks = [];
   let half = size / 2;
+  let roughness = 0.09;
 
   for (let gx = 0; gx < size; gx++) {
     for (let gz = 0; gz < size; gz++) {
@@ -63,7 +64,7 @@ function genIsland(size, maxHeight) {
       let d = sqrt(x * x + z * z) / half;
 
       if (d <= 1.2) {
-        let h = noise(gx * 0.08, gz * 0.08) * maxHeight;
+        let h = noise(gx * roughness, gz * roughness) * maxHeight;
         h = h * (1 - d);
 
         let y = 0;
