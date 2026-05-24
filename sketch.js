@@ -11,7 +11,8 @@ function setup() {
   lookup = {};
   lookup.stone = color(120, 120, 120);
   lookup.grass = color(0, 170, 0);
-  // lookup = color()
+  lookup.andesite = color(70, 70, 70);
+  lookup.dirt = color(120, 70, 0);
   // lookup = color()
 
   ui_save = createButton("save mcfunction");
@@ -36,8 +37,14 @@ function draw() {
 function getTexture(x, y, z) {
   let s = 0.005;
   let off = 200;
-  if (noise(x * s + off, y * s + off, z * s + off) > 0.9) {
+  if (y > -blockSize * 1) {
     return "grass";
+  }
+  if (y > -blockSize * random(2, 5)) {
+    return "dirt";
+  }
+  if (noise(x * s + off, y * s + off, z * s + off) > 0.9) {
+    return "andesite";
   }
   return "stone";
 }
@@ -78,7 +85,7 @@ function genIsland(size, maxHeight) {
 }
 
 function mousePressed() {
- // saveMcfunction(island);
+  // saveMcfunction(island);
 }
 
 function keyPressed() {
@@ -96,18 +103,20 @@ function saveMcfunction() {
     pack.push(`setblock ~${is.x} ~${is.y} ~${is.z} ${is.type}`);
   }
 
-  let ID = "island_" + year() + month() + day() + hour() + minute() + second() + ".mcfunction";
+  let ID =
+    "island_" +
+    year() +
+    month() +
+    day() +
+    hour() +
+    minute() +
+    second() +
+    ".mcfunction";
 
   // FIX: join the array yourself
   //let data = pack.join("\n")
   saveStrings(pack, ID);
 }
-
-
-
-
-
-
 
 function renderIsland(blocks) {
   let list = [];
