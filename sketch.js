@@ -6,6 +6,7 @@ let maxHeight = 200;
 const ui_scale = 2;
 
 function setup() {
+  frameRate(20);
   createCanvas(windowWidth, windowHeight, WEBGL);
   noiseDetail(4, 1);
   lookup = {};
@@ -22,23 +23,20 @@ function setup() {
   ui_save.style("font-size", ui_scale * 15 + "px");
 
   ui_generate = createButton("generate");
-  ui_generate.position(0, 65*ui_scale);
+  ui_generate.position(0, 65 * ui_scale);
   ui_generate.mousePressed(ui_pressed_generate);
   ui_generate.size(80 * ui_scale, 20 * ui_scale);
   ui_generate.style("font-size", ui_scale * 15 + "px");
-  
 
-  
   ui_maxHeight = createInput(200);
-  ui_maxHeight.position(0, 40*ui_scale);
+  ui_maxHeight.position(0, 40 * ui_scale);
   ui_maxHeight.size(30 * ui_scale, 10 * ui_scale);
   ui_maxHeight.style("font-size", ui_scale * 10 + "px");
-  
+
   ui_gridSize = createInput(20);
-  ui_gridSize.position(0, 53*ui_scale);
+  ui_gridSize.position(0, 53 * ui_scale);
   ui_gridSize.size(30 * ui_scale, 10 * ui_scale);
   ui_gridSize.style("font-size", ui_scale * 10 + "px");
-  
 
   island = genIsland(gridSize, maxHeight);
 
@@ -55,7 +53,7 @@ function draw() {
 
 function ui_pressed_generate() {
   island = [];
-  island = genIsland(float(ui_gridSize.value()),float(ui_maxHeight.value()))
+  island = genIsland(float(ui_gridSize.value()), float(ui_maxHeight.value()));
 }
 
 function getTexture(x, y, z) {
@@ -74,16 +72,15 @@ function getTexture(x, y, z) {
 }
 
 function genIsland(size, maxHeight) {
-  noiseSeed(random(0,1000000))
+  noiseSeed(random(0, 1000000));
   console.time("time");
-  // let c = 0
+  let count = 0;
   let blocks = [];
   let half = size / 2;
   let roughness = 0.09;
 
   for (let gx = 0; gx < size; gx++) {
     for (let gz = 0; gz < size; gz++) {
-      // c++
       let x = gx - half;
       let z = gz - half;
       let d = sqrt(x * x + z * z) / half;
@@ -94,6 +91,7 @@ function genIsland(size, maxHeight) {
 
         let y = 0;
         while (y > -h) {
+          count += 1;
           blocks.push({
             x: x * blockSize,
             y: y,
@@ -105,8 +103,9 @@ function genIsland(size, maxHeight) {
       }
     }
   }
-  // console. log(c)
+  console.log(count);
   console.timeEnd("time");
+  console.log(blocks.length);
   return blocks;
 }
 
@@ -126,10 +125,16 @@ function saveMcfunction() {
 
   for (let i = 0; i < island.length; i++) {
     let is = island[i];
-    pack.push(`setblock ~${is.x/blockSize} ~${is.y/blockSize} ~${is.z/blockSize} ${is.type}`);
+    pack.push(
+      `setblock ~${is.x / blockSize} ~${is.y / blockSize} ~${
+        is.z / blockSize
+      } ${is.type}`
+    );
   }
 
-  let ID =
+  let data = pack.join("\n");
+
+  let filename =
     "island_" +
     year() +
     month() +
@@ -139,11 +144,17 @@ function saveMcfunction() {
     second() +
     ".mcfunction";
 
-  // FIX: join the array yourself
-  //let data = pack.join("\n")
-  saveStrings(pack, ID);
+  let blob = new Blob([data], { type: "application/octet-stream" });
+
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(a.href);
 }
 
+//noprotect
 function renderIsland(blocks) {
   let list = [];
   for (let i = 0; i < blocks.length; i++) {
@@ -151,6 +162,7 @@ function renderIsland(blocks) {
     list.push(b.x + "," + b.y + "," + b.z);
   }
 
+  //noprotect
   for (let i = 0; i < blocks.length; i++) {
     let b = blocks[i];
     let visible = false;
