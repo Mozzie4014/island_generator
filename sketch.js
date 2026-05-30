@@ -3,7 +3,7 @@ let gridSize = 20;
 let blockSize = 8;
 let maxHeight = 200;
 
-var ui_scale = 2;
+var ui_scale = 3;
 
 function setup() {
   frameRate(20);
