@@ -3,12 +3,11 @@ let gridSize = 20;
 let blockSize = 8;
 let maxHeight = 200;
 
-const ui_scale = 2;
+var ui_scale = 2;
 
 function setup() {
   frameRate(20);
-  createCanvas(windowWidth, windowHeight, WEBGL);
-  noiseDetail(4, 1);
+
   lookup = {};
   lookup.stone = color(120, 120, 120);
   lookup.grass_block = color(0, 170, 0);
@@ -16,27 +15,9 @@ function setup() {
   lookup.dirt = color(120, 70, 0);
   // lookup = color()
 
-  ui_save = createButton("save mcfunction");
-  ui_save.position(0, 0);
-  ui_save.mousePressed(saveMcfunction);
-  ui_save.size(120 * ui_scale, 40 * ui_scale);
-  ui_save.style("font-size", ui_scale * 15 + "px");
-
-  ui_generate = createButton("generate");
-  ui_generate.position(0, 65 * ui_scale);
-  ui_generate.mousePressed(ui_pressed_generate);
-  ui_generate.size(80 * ui_scale, 20 * ui_scale);
-  ui_generate.style("font-size", ui_scale * 15 + "px");
-
-  ui_maxHeight = createInput(200);
-  ui_maxHeight.position(0, 40 * ui_scale);
-  ui_maxHeight.size(30 * ui_scale, 10 * ui_scale);
-  ui_maxHeight.style("font-size", ui_scale * 10 + "px");
-
-  ui_gridSize = createInput(20);
-  ui_gridSize.position(0, 53 * ui_scale);
-  ui_gridSize.size(30 * ui_scale, 10 * ui_scale);
-  ui_gridSize.style("font-size", ui_scale * 10 + "px");
+  createCanvas(windowWidth, windowHeight, WEBGL);
+  noiseDetail(4, 1);
+  setup_ui();
 
   island = genIsland(gridSize, maxHeight);
 
@@ -57,7 +38,7 @@ function ui_pressed_generate() {
 }
 
 function getTexture(x, y, z) {
-  let s = 0.02;
+  let s = float(ui_textureNoiseScale.value());
   let off = 200;
   if (y > -blockSize * 1) {
     return "grass_block";
@@ -77,7 +58,7 @@ function genIsland(size, maxHeight) {
   let count = 0;
   let blocks = [];
   let half = size / 2;
-  let roughness = 0.09;
+  let roughness = float(ui_roughness.value());
 
   for (let gx = 0; gx < size; gx++) {
     for (let gz = 0; gz < size; gz++) {
