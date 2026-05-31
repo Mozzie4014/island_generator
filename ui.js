@@ -1,10 +1,10 @@
 function setup_ui() {
   
-  ui_scale = 2
+  ui_scale = 1
   
   let buffer = 5;
 
-// === MAIN SIDEBAR ===
+// main holder
 ui_main = createDiv();
 ui_main.position(0, 0);
 ui_main.style("width", ui_scale * 150 + "px");
@@ -17,7 +17,7 @@ ui_main.style("box-sizing", "border-box");
 ui_main.style("gap", (4 * ui_scale) + "px");
 
 
-// row gen (description left, element right)
+// row gen description, element
 function makeRow(descText) {
   let row = createDiv();
   row.parent(ui_main);
@@ -80,7 +80,7 @@ ui_gridSize.style("height", (12 * ui_scale) + "px");
   
 // roughness 
 let row_roughness = makeRow("roughness");
-ui_roughness = createInput(0.02);
+ui_roughness = createInput(0.04);
 ui_roughness.parent(row_roughness);
 ui_roughness.style("font-size", (9 * ui_scale) + "px");
 ui_roughness.style("width", (40 * ui_scale) + "px");
