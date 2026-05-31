@@ -1,6 +1,6 @@
 function setup_ui() {
   
-  ui_scale = 1
+  ui_scale = 2
   
   let buffer = 5;
 
