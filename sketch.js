@@ -9,10 +9,11 @@ function setup() {
   frameRate(20);
 
   lookup = {};
-  lookup.stone = color(120, 120, 120);
-  lookup.grass_block = color(0, 170, 0);
-  lookup.andesite = color(70, 70, 70);
-  lookup.dirt = color(120, 70, 0);
+  lookup.stone = color(120, 120, 120, 255);
+  lookup.grass_block = color(0, 170, 0, 255);
+  lookup.andesite = color(70, 70, 70, 255);
+  lookup.dirt = color(120, 70, 0, 255);
+  lookup.cave_air = color(0, 0, 0, 5);
   // lookup = color()
 
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -59,7 +60,9 @@ function genIsland(size, maxHeight) {
   let blocks = [];
   let half = size / 2;
   let roughness = float(ui_roughness.value());
+  let lowest = 0;
 
+  //main mass
   for (let gx = 0; gx < size; gx++) {
     for (let gz = 0; gz < size; gz++) {
       let x = gx - half;
@@ -80,13 +83,45 @@ function genIsland(size, maxHeight) {
             type: getTexture(gx, y, gz),
           });
           y = y - blockSize;
+          lowest = min(y, lowest);
         }
       }
     }
   }
+
+  // carve cave
+
+  let cave_length = floor(abs(lowest) / blockSize);
+  let cave = [];
+  let angle = 0;
+  let cave_noise_scale = float(ui_caveNoiseScale.value());
+  let cave_radius = float(ui_caveRadius.value());
+
+  let x = 0;
+  let y = 0;
+  let z = 0;
+
+  for (let i = 0; i < cave_length; i++) {
+    angle += noise(i * cave_noise_scale) - 0.5;
+    x += cos(angle);
+    z += sin(angle);
+    y -= blockSize;
+
+    carveSphere(
+      blocks,
+      x * blockSize,
+      y,
+      z * blockSize,
+      cave_radius * blockSize
+    );
+
+    cave.push([x, y, z]);
+  }
+
   console.log(count);
   console.timeEnd("time");
-  console.log(blocks.length);
+  console.log(cave);
+  // console.log(blocks.length);
   return blocks;
 }
 
@@ -178,6 +213,24 @@ function renderIsland(blocks) {
       fill(lookup[b.type]);
       box(blockSize);
       pop();
+    }
+  }
+}
+
+function carveSphere(blocks, cx, cy, cz, r) {
+  let r2 = r * r;
+
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    let b = blocks[i];
+
+    let dx = b.x - cx;
+    let dy = b.y - cy;
+    let dz = b.z - cz;
+
+    let dist2 = dx * dx + dy * dy + dz * dz;
+
+    if (dist2 <= r2) {
+      b.type = "cave_air";
     }
   }
 }
