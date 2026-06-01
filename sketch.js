@@ -120,7 +120,7 @@ function genIsland(size, maxHeight) {
 
   console.log(count);
   console.timeEnd("time");
-  console.log(cave);
+ // console.log(cave);
   // console.log(blocks.length);
   return blocks;
 }
