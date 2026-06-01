@@ -95,4 +95,20 @@ ui_textureNoiseScale.style("width", (40 * ui_scale) + "px");
 ui_textureNoiseScale.style("height", (12 * ui_scale) + "px");
 
   
+// noise scale
+let row_caveNoiseScale = makeRow("cave noise scale");
+ui_caveNoiseScale = createInput(0.01);
+ui_caveNoiseScale.parent(row_caveNoiseScale);
+ui_caveNoiseScale.style("font-size", (9 * ui_scale) + "px");
+ui_caveNoiseScale.style("width", (40 * ui_scale) + "px");
+ui_caveNoiseScale.style("height", (12 * ui_scale) + "px");
+
+  
+// cave radius 
+let row_caveRadius = makeRow("cave radius");
+ui_caveRadius = createInput(3);
+ui_caveRadius.parent(row_caveRadius);
+ui_caveRadius.style("font-size", (9 * ui_scale) + "px");
+ui_caveRadius.style("width", (40 * ui_scale) + "px");
+ui_caveRadius.style("height", (12 * ui_scale) + "px");
   }
